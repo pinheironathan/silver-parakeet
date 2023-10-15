@@ -1,0 +1,58 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+public class CRUDInterface {
+    private ArrayList<String> names = new ArrayList<>();
+    private DefaultListModel<String> listModel = new DefaultListModel<>();
+    private JList<String> nameList = new JList<>(listModel);
+
+    public CRUDInterface() {
+        JFrame frame = new JFrame("CRUD Example");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 300);
+        frame.setLayout(new FlowLayout());
+
+        JTextField nameInput = new JTextField(15);
+        JButton addButton = new JButton("Add");
+        JButton deleteButton = new JButton("Delete");
+
+        nameList.setPreferredSize(new Dimension(300, 200));
+
+        addButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String name = nameInput.getText();
+                if (!name.isEmpty()) {
+                    names.add(name);
+                    listModel.addElement(name);
+                    nameInput.setText("");
+                }
+            }
+        });
+
+        deleteButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int selectedIndex = nameList.getSelectedIndex();
+                if (selectedIndex >= 0) {
+                    names.remove(selectedIndex);
+                    listModel.remove(selectedIndex);
+                }
+            }
+        });
+
+        frame.add(nameInput);
+        frame.add(addButton);
+        frame.add(deleteButton);
+        frame.add(nameList);
+
+        frame.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new CRUDInterface();
+        });
+    }
+}
